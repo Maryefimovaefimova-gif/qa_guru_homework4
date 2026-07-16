@@ -7,12 +7,12 @@ base_url = "https://qa-guru.github.io/one-page-form/text-box.html"
 
 
 def test_for_all_fields():
-    print("Рефакторинг - итерация 1!")
+    print("Рефакторинг ")
 
     driver = webdriver.Chrome()
 
     try:
-        # 2. Открытие страницы
+        
         driver.get(base_url)
         driver.maximize_window()
         time.sleep(3)
@@ -32,7 +32,7 @@ def test_for_all_fields():
         submit_button = driver.find_element(By.ID, "submit")
         submit_button.click()
 
-        time.sleep(3)  # Пауза, чтобы увидеть результат отправки
+        time.sleep(3) 
 
         result_box = driver.find_element(By.ID, "output")
 
