@@ -1,14 +1,11 @@
 import pytest
 
 
-# ============= Задание 1: Indirect фикстура для авторизации =============
+
 @pytest.fixture
 def auth_headers(request):
-    """
-    Фикстура для косвенной параметризации заголовков авторизации.
-    Получает роль из параметров и возвращает соответствующие заголовки.
-    """
-    role = request.param  # Получаем параметр из @pytest.mark.parametrize
+   
+    role = request.param  
 
     headers = {
         "User": {
@@ -33,9 +30,7 @@ def auth_headers(request):
 
 @pytest.fixture
 def api_client(auth_headers):
-    """
-    Фикстура, создающая API клиента с авторизационными заголовками.
-    """
+
 
     class APIClient:
         def __init__(self, headers):
@@ -45,7 +40,7 @@ def api_client(auth_headers):
         def get(self, endpoint):
             print(f"  → GET {self.base_url}{endpoint}")
             print(f"  → Headers: {self.headers}")
-            # Имитация ответа
+           
             return {
                 "status": 200,
                 "data": f"Response from {endpoint}",
