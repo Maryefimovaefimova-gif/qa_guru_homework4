@@ -1,0 +1,5 @@
+{
+  "id": 2,
+  "name": "Registration Scenario",
+  "payload": {"email": "user@test.com", "password": "test123"}
+}
