@@ -12,12 +12,6 @@ def registration_page(driver):
     page.open_and_prepare()
     return page
 
-
-# =========================
-# ПОЗИТИВНЫЕ ТЕСТЫ
-# =========================
-
-# 1. Проверяем, что форма отправляется с обязательными полями:
 @pytest.mark.parametrize(
     "first_name, last_name, gender, phone",
     [
@@ -35,19 +29,10 @@ def test_successful_submit_with_required_fields(registration_page, first_name, l
     for text in (first_name, last_name):
         registration_page.check_user_in_table(text)
 
-
-# 2. После отправки формы ждём, пока в таблице результата появится название хобби (Fluent Wait)
-@pytest.mark.parametrize(
-    "hobby_number, expected_text",
-    [
-        (1, "Sports"),
-        (2, "Reading"),
-        (3, "Music"),
-    ]
-)
+@pytest.mark.parametrize("hobby_text", ["Sports", "Reading", "Music"])
 def test_fluent_wait_result_table_has_hobby_text(registration_page, driver, hobby_text):
     registration_page.fill_required_fields("Ivan", "Petrov", gender=1, phone="9049153045")
-    registration_page.select_hobby(hobby_text)  # Sports
+    registration_page.select_hobby(hobby_text)
     registration_page.submit()
 
     wait = WebDriverWait(
@@ -62,7 +47,7 @@ def test_fluent_wait_result_table_has_hobby_text(registration_page, driver, hobb
     registration_page.check_user_in_table(hobby_text)
 
 
-# 3. Проверяем отправку формы, где выбраны все доступные Subjects:
+
 def test_positive_select_all_subjects(registration_page):
     registration_page.fill_required_fields("Ivan", "Petrov", gender=1, phone="9998887766")
 
@@ -80,32 +65,20 @@ def test_positive_select_all_subjects(registration_page):
     for subject in subjects:
         registration_page.check_user_in_table(subject)
 
-
-# 4. Проверяем отправку формы, где выбраны все доступные Hobbies:
 def test_positive_select_all_hobbies(registration_page):
     registration_page.fill_required_fields("Anna", "Ivanova", gender=2, phone="1112223344")
 
-    hobbies = [
-        (1, "Sports"),
-        (2, "Reading"),
-        (3, "Music"),
-    ]
+    hobbies = ["Sports", "Reading", "Music"]
 
-    for hobby_number, _ in hobbies:
-        registration_page.select_hobby(hobby_number)
+    for hobby_name  in hobbies:
+        registration_page.select_hobby(hobby_name)
 
     registration_page.submit()
     registration_page.check_success_modal()
 
-    for _, hobby_name in hobbies:
+    for hobby_name in hobbies:
         registration_page.check_user_in_table(hobby_name)
 
-
-# =========================
-# НЕГАТИВНЫЕ ТЕСТЫ
-# =========================
-
-# 1. Проверяем, что обязательные поля не пустые:
 @pytest.mark.parametrize(
     "case, data",
     [
@@ -133,8 +106,6 @@ def test_negative_required_fields_not_submitted(registration_page, case, data):
 
     assert registration_page.is_success_modal_opened() is False
 
-
-# 2. Проверяем, что форма не отправляется с невалидным номером телефона:
 @pytest.mark.parametrize(
     "case, phone",
     [
